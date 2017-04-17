@@ -3,7 +3,7 @@ const Bluebird = require('bluebird');
 
 require('chai').use(require('chai-as-promised')).should();
 
-describe('get()', () => {
+describe('list/get()', () => {
   let get, serialization, fullKey, redis, nsOpts;
   beforeEach(() => {
     nsOpts = {};

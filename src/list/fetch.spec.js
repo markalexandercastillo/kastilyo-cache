@@ -4,7 +4,7 @@ const fetch = require('./fetch');
 
 require('chai').use(require('chai-as-promised')).should();
 
-describe('fetch()', () => {
+describe('list/fetch()', () => {
   let get, push;
   beforeEach(() => {
     push = td.function();

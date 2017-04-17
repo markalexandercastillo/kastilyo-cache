@@ -2,7 +2,7 @@ const td = require('testdouble');
 
 require('chai').should();
 
-describe('push()', () => {
+describe('list/push()', () => {
   let push, serialization, fullKey, redis, nsOpts;
   beforeEach(() => {
     nsOpts = {};
