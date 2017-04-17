@@ -1,5 +1,4 @@
-const td = require('testdouble');
-const Bluebird = require('bluebird');
+const td = require('./../../test/testdouble');
 
 require('chai').use(require('chai-as-promised')).should();
 
@@ -19,7 +18,8 @@ describe('list/get()', () => {
 
   it('asks for all items when sending lrange to redis', () => {
     td.when(redis.lrangeAsync(td.matchers.anything(), 0, -1))
-      .thenReturn(Bluebird.resolve([]));
+      .thenResolve([]);
+
     return get(redis, nsOpts, 'some-key');
   });
 
@@ -27,20 +27,25 @@ describe('list/get()', () => {
     td.when(fullKey(nsOpts, 'expected-key'))
       .thenReturn('full-key');
     td.when(redis.lrangeAsync('full-key'), {ignoreExtraArgs: true})
-      .thenReturn(Bluebird.resolve([]));
+      .thenResolve([]);
+
     return get(redis, nsOpts, 'expected-key');
   });
 
   it('unserializes items coming back from redis', () => {
     td.when(redis.lrangeAsync(), {ignoreExtraArgs: true})
-      .thenReturn(Bluebird.resolve([
+      .thenResolve([
         'serialized-item-1',
         'serialized-item-2',
         'serialized-item-3'
-      ]));
-    td.when(serialization.unserialize('serialized-item-1'), {ignoreExtraArgs: true}).thenReturn('item-1');
-    td.when(serialization.unserialize('serialized-item-2'), {ignoreExtraArgs: true}).thenReturn('item-2');
-    td.when(serialization.unserialize('serialized-item-3'), {ignoreExtraArgs: true}).thenReturn('item-3');
+      ]);
+    td.when(serialization.unserialize('serialized-item-1'), {ignoreExtraArgs: true})
+      .thenReturn('item-1');
+    td.when(serialization.unserialize('serialized-item-2'), {ignoreExtraArgs: true})
+      .thenReturn('item-2');
+    td.when(serialization.unserialize('serialized-item-3'), {ignoreExtraArgs: true})
+      .thenReturn('item-3');
+
     return get(redis, nsOpts, 'some-key').should.become([
       'item-1',
       'item-2',

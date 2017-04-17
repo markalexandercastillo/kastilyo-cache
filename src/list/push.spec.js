@@ -1,4 +1,4 @@
-const td = require('testdouble');
+const td = require('./../../test/testdouble');
 
 require('chai').should();
 
@@ -24,14 +24,19 @@ describe('list/push()', () => {
   });
 
   it('serializes items being set in redis', () => {
-    td.when(serialization.serialize('item-1'), {ignoreExtraArgs: true}).thenReturn('serialized-item-1');
-    td.when(serialization.serialize('item-2'), {ignoreExtraArgs: true}).thenReturn('serialized-item-2');
-    td.when(serialization.serialize('item-3'), {ignoreExtraArgs: true}).thenReturn('serialized-item-3');
+    td.when(serialization.serialize('item-1'), {ignoreExtraArgs: true})
+      .thenReturn('serialized-item-1');
+    td.when(serialization.serialize('item-2'), {ignoreExtraArgs: true})
+      .thenReturn('serialized-item-2');
+    td.when(serialization.serialize('item-3'), {ignoreExtraArgs: true})
+      .thenReturn('serialized-item-3');
+
     push(redis, nsOpts, 'some-key', [
       'item-1',
       'item-2',
       'item-3'
     ]);
+
     td.verify(redis.rpushAsync(
       td.matchers.anything(),
       'serialized-item-1',

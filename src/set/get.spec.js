@@ -1,5 +1,4 @@
-const td = require('testdouble');
-const Bluebird = require('bluebird');
+const td = require('./../../test/testdouble');
 
 require('chai').use(require('chai-as-promised')).should();
 
@@ -21,20 +20,25 @@ describe('set/get()', () => {
     td.when(fullKey(nsOpts, 'expected-key'))
       .thenReturn('full-key');
     td.when(redis.smembersAsync('full-key'), {ignoreExtraArgs: true})
-      .thenReturn(Bluebird.resolve([]));
+      .thenResolve([]);
+
     return get(redis, nsOpts, 'expected-key');
   });
 
   it('unserializes members coming back from redis', () => {
     td.when(redis.smembersAsync(), {ignoreExtraArgs: true})
-      .thenReturn(Bluebird.resolve([
+      .thenResolve([
         'serialized-member-1',
         'serialized-member-2',
         'serialized-member-3'
-      ]));
-    td.when(serialization.unserialize('serialized-member-1'), {ignoreExtraArgs: true}).thenReturn('member-1');
-    td.when(serialization.unserialize('serialized-member-2'), {ignoreExtraArgs: true}).thenReturn('member-2');
-    td.when(serialization.unserialize('serialized-member-3'), {ignoreExtraArgs: true}).thenReturn('member-3');
+      ]);
+    td.when(serialization.unserialize('serialized-member-1'), {ignoreExtraArgs: true})
+      .thenReturn('member-1');
+    td.when(serialization.unserialize('serialized-member-2'), {ignoreExtraArgs: true})
+      .thenReturn('member-2');
+    td.when(serialization.unserialize('serialized-member-3'), {ignoreExtraArgs: true})
+      .thenReturn('member-3');
+
     return get(redis, nsOpts, 'some-key').should.become([
       'member-1',
       'member-2',

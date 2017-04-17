@@ -10,5 +10,6 @@ describe('fullKey()', () => it(
       delimiter: ':'
     },
     'some-key'
-  ).should.equal('namespace-1:namespace-2:some-key')
+  )
+    .should.equal('namespace-1:namespace-2:some-key')
 ));

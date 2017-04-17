@@ -1,4 +1,4 @@
-const td = require('testdouble');
+const td = require('./../../test/testdouble');
 
 require('chai').should();
 
@@ -19,7 +19,9 @@ describe('hash/set()', () => {
   it('associates the hash being set with the expanded key when sending hmset to redis', () => {
     td.when(fullKey(nsOpts, 'expected-key'))
       .thenReturn('full-key');
+
     set(redis, nsOpts, 'expected-key', {hashKey1: 'value-1'});
+
     td.verify(redis.hmsetAsync('full-key'), {ignoreExtraArgs: true});
   });
 
@@ -27,11 +29,13 @@ describe('hash/set()', () => {
     td.when(serialization.serialize('value-1'), {ignoreExtraArgs: true}).thenReturn('serialized-value-1');
     td.when(serialization.serialize('value-2'), {ignoreExtraArgs: true}).thenReturn('serialized-value-2');
     td.when(serialization.serialize('value-3'), {ignoreExtraArgs: true}).thenReturn('serialized-value-3');
+
     set(redis, nsOpts, 'some-key', {
       'hash-key-1': 'value-1',
       'hash-key-2': 'value-2',
       'hash-key-3': 'value-3'
     });
+
     td.verify(redis.hmsetAsync(
       td.matchers.anything(),
       'hash-key-1',
