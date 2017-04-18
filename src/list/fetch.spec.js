@@ -28,7 +28,7 @@ describe('list/fetch()', () => {
       .should.become(cachedItems);
   });
 
-  it('pushes and resolves to miss handler items when nothing is found in redis', () => {
+  it('pushes and resolves to miss handler data when nothing is found in redis', () => {
     const freshItems = [
       'fresh-item-1',
       'fresh-item-2',
@@ -44,7 +44,7 @@ describe('list/fetch()', () => {
       .should.become(freshItems);
   });
 
-  it('resolves to an empty array when nothing is in redis and nothing is in miss the handler', () => {
+  it('resolves to an empty array when nothing is in redis and nothing is in the miss handler', () => {
     td.when(get('expected-key'))
       .thenResolve([]);
 

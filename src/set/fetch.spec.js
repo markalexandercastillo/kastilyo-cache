@@ -28,7 +28,7 @@ describe('set/fetch()', () => {
     return fetch(get, add, 'expected-key', () => []).should.become(cachedMembers);
   });
 
-  it('adds and resolves to miss handler members when nothing is found in redis', () => {
+  it('adds and resolves to miss handler data when nothing is found in redis', () => {
     const freshMembers = [
       'fresh-member-1',
       'fresh-member-2',
